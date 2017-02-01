@@ -101,6 +101,44 @@ Map<String, _Function> _functions = {
     ..handler = (List<Value> args) {
       return new Value.matrix(args[0].mvalue.rref());
   }).func,
+
+  "inv": (new _FunctionBuilder()
+    ..name = "inv"
+    ..description = "inverts an invertible matrix"
+    ..arg = (new _FunctionArgBuilder()
+      ..type = ValType.M
+      ..name = "m"
+      ..description = "The matrix to invert. It must be square and invertible.")
+    ..handler = (List<Value> args) {
+      if (args[0].mvalue.rows != args[0].mvalue.cols) {
+        throw new FunctionException("a non-square matrix cannot be inverted");
+      }
+
+      try {
+        return new Value.matrix(args[0].mvalue.inverse());
+      } on MatrixException catch (e) {
+        throw new FunctionException(e.message);
+      }
+  }).func,
+
+  "aug": (new _FunctionBuilder()
+    ..name = "aug"
+    ..description = "augments one matrix onto another"
+    ..arg = (new _FunctionArgBuilder()
+      ..type = ValType.M
+      ..name = "a"
+      ..description = "The matrix being augmented")
+    ..arg = (new _FunctionArgBuilder()
+      ..type = ValType.M
+      ..name = "b"
+      ..description = "The matrix which augments")
+    ..handler = (List<Value> args) {
+      if (args[0].mvalue.rows != args[1].mvalue.rows) {
+        throw new FunctionException("matrices <a> and <b> must have the same number of rows to be augmented");
+      }
+
+      return new Value.matrix(args[0].mvalue.augment(args[1].mvalue));
+  }).func,
 };
 
 Value callFunction(Token ftoken, List<Value> args) {

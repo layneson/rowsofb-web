@@ -6,6 +6,12 @@ import "package:rowsofb/math.dart";
 Environment env = new Environment();
 
 main() {
+  print("main");
+  html.window.onLoad.listen((_) => start());
+}
+
+start() {
+  print("start");
   html.querySelector("#expression").onKeyDown.listen((ev) {
     if (ev.keyCode == html.KeyCode.ENTER) {
       ev.preventDefault();

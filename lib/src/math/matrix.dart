@@ -210,12 +210,12 @@ class Matrix {
 
   /// Copies this [Matrix] and appends the given [Matrix] on the right, returning the result.
   ///
-  /// Throws an [Exception] if the matrices do not have the same number of rows.
+  /// Throws an [MatrixException] if the matrices do not have the same number of rows.
   Matrix augment(Matrix b) {
     Matrix a = this;
 
     if (a.rows != b.rows) {
-      throw new Exception("augmented matrices must have equal numbers of rows");
+      throw new MatrixException("augmented matrices must have equal numbers of rows");
     }
 
     Matrix result = new Matrix(a.rows, a.cols + b.cols);
@@ -249,12 +249,12 @@ class Matrix {
   }
 
   /// Copies this [Matrix] and computes its inverse.
-  /// An [Exception] is thrown if the matrix has no inverse.
+  /// A [MatrixException] is thrown if the matrix has no inverse.
   Matrix inverse() {
     Matrix m = copy();
 
     if (m.rows != m.cols) {
-      throw new Exception("non-square matrices have no inverse");
+      throw new MatrixException("non-square matrices have no inverse");
     }
 
     m = m.augment(new Matrix.identity(m.rows));
@@ -264,7 +264,7 @@ class Matrix {
     Matrix leftPart = m.segment(1, 1, m.rows, m.rows);
 
     if (!leftPart.isIdentity()) {
-      throw new Exception("matrix has no inverse");
+      throw new MatrixException("matrix has no inverse");
     }
 
     return m.segment(1, m.rows+1, m.rows, m.cols);
@@ -273,7 +273,7 @@ class Matrix {
   /// Adds this [Matrix] to [Matrix] m, returning the result as a new instance.
   Matrix operator +(Matrix m) {
     if (m.rows != rows || m.cols != cols) {
-      throw new Exception("addition requires two indentically-sized matrices");
+      throw new MatrixException("addition requires two indentically-sized matrices");
     }
 
     Matrix result = copy();
@@ -301,7 +301,7 @@ class Matrix {
   /// Multiplies this [Matrix] by [Matrix] m, returning the result as a new instance.
   Matrix operator *(Matrix m) {
     if (cols != m.rows) {
-      throw new Exception("multiplication can only be done on matrices A and B if the number of columns of A equals the number of rows of B");
+      throw new MatrixException("multiplication can only be done on matrices A and B if the number of columns of A equals the number of rows of B");
     }
 
     Matrix result = new Matrix(rows, m.cols);
@@ -321,4 +321,10 @@ class Matrix {
 
     return result;
   }
+}
+
+class MatrixException implements Exception {
+  String message;
+
+  MatrixException(this.message);
 }
