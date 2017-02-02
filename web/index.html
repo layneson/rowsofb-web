@@ -4,6 +4,8 @@
 
 <head>
     <link rel="stylesheet" href="theme.css" />
+    <link rel="stylesheet" href="md.css" />
+
     
     <!-- <script type="application/dart" src="main.dart"></script> -->
 
@@ -39,6 +41,69 @@
 
     <div id="results" class="below-box">
         
+    </div>
+
+    <div id="instructions">
+        <h1>Rows Of B - the matrix calculator</h1>
+
+<p>Rows of B is an online, expression-based matrix calculator. What does <em>expression-based</em> mean? Good question!</p>
+
+<h2>A Tutorial</h2>
+
+<h3>Basics</h3>
+
+<p>Rows of B has a simple interface; at first, all you see is a single textbox. Try typing some basic math, such as <code>5 + 5</code> or <code>20*8 + 2</code>, into that box (When you press enter, you should see the result of your input in a green box. Whenever we say &ldquo;input into the calculator&rdquo; or &ldquo;input into the input box&rdquo; we also intend for you to press enter). Try entering some invalid input as well, such as <code>1+</code> or <code>%</code>. You will see that an error appears below the input in place of the result box.</p>
+
+<p>You have seen how <em>scalar</em> expressions work. Rows of B supports addition, subtraction, multiplication, division, and negation for scalar numbers. Note also that Rows of B operates entirely on the concept of fractions, not decimals. Thus, an input of <code>123 / 5</code> will appear in the results box as <code>123/5</code>, and not as <code>24.6</code>. You also cannot enter decimal numbers into the calculator. Note also that as of the latest version, Rows of B does not support exponents.</p>
+
+<h3>Variables</h3>
+
+<p>You might be thinking, &ldquo;Well, what about matrices?&rdquo; Another good question! Rows of B supports 52 <em>variables</em>: 26 for scalars and 26 for matrices. The scalar variables are all lowercase letters of the English alphabet and are preset to <code>0</code>. Enter <code>a</code> or <code>b</code> into the calculator and you will get <code>0</code> as your result. However, the variable <code>z</code> is special: it is automatically set to the result of the last scalar calculation. Try it by evaluating an expression and then entering <code>z</code>.</p>
+
+<p>The matrix variables are the uppercase letters of the English alphabet. Each matrix variable is preset to a 3x3 zero matrix. Just like with scalars, <code>Z</code> is a special matrix variable that is automatically set to the result of the last matrix calculation. Thus, if you enter <code>D</code> or <code>Q</code> or <code>R</code> into the calculator, you should see a 3x3 zero matrix in the result box.</p>
+
+<h3>Matrix Input</h3>
+
+<p>What if you want to set a variable&rsquo;s value? Simply end your expression with <code>-&gt; s</code>, where <code>s</code> is the name of the variable in which you want to store the expression&rsquo;s result. For example, <code>3 + 2 -&gt; a</code> will store <code>5</code> in <code>a</code>. But what about matrices? How can they be set? Rows of B has a special syntax for matrix input. Enter the following into the calculator:</p>
+
+<pre><code>$$
+</code></pre>
+
+<p>You will see a blue box appear below the input box. Your cursor will be automatically placed within a box inside a 1x1 matrix. For every <code>$$</code> you enter in your expression, a <em>matrix input</em> will appear in the blue box. Enter your (1,1) entry, then press TAB. Another column will be added to your matrix. Keep entering numbers and pressing TAB until your first row is complete. At that time, press ENTER, and a new row will start. Continue entering numbers there until you are satisfied. Any empty boxes will be converted to zero later, so don&rsquo;t worry about skipping any. When you are finished defining the current matrix, press CTRL-ENTER. This will either move to the next matrix (if you wish to define more than one) or evaluate your expression.</p>
+
+<p>Try entering <code>$$ + $$</code> into the expression box. Then input two matrices into the blue box. Make sure they are the same size! Then, when you press CTRL-ENTER after completing the second matrix, the result of adding the two together will appear in the green box! That is, unless you&rsquo;ve made a mistake. Also try entering <code>5*$$</code> or <code>$$/6 -&gt; A</code>!</p>
+
+<p>The <code>$</code> notation comes in handy if you want to define a specific matrix variable and use it at the same time. Sure, you could simply do <code>$$ -&gt; F</code> to set <code>F</code> to a custom matrix, but let us say that you were going to immediately input <code>F * 3</code>. It would be easier to skip the first step and instead enter <code>$F * 3</code>. This will prompt you for the value of <code>F</code> prior to evaluating the expression. After evaluation, <code>F</code> will still hold the value you entered.</p>
+
+<h3>Functions</h3>
+
+<p>What would a matrix calculator be without a way to calculate Reduced Row Echelon Form, or find matrix inverses? You can evaluate a function with the syntax <code>name(argument1, argument2)</code> or <code>name(argument1)</code>. The arguments depend on the function. Rows of B currently includes the following functions:</p>
+
+<ul>
+<li><code>ident(scalar &lt;size&gt;)</code>: Produces an identity matrix with size <code>size</code>.</li>
+<li><code>aug(matrix &lt;a&gt;, matrix &lt;b&gt;)</code>: Augments <code>a</code> with <code>b</code>.</li>
+<li><code>ref(matrix &lt;m&gt;)</code>: Produces <code>m</code> in a row echelon form.</li>
+<li><code>rref(matrix &lt;m&gt;)</code>: Produces <code>m</code> in reduced row echelon form.</li>
+<li><code>inv(matrix &lt;m&gt;)</code>: Inverts <code>m</code> if possible.</li>
+</ul>
+
+<p>Functions can be used anywhere a matrix variable can be used. Here are some examples:</p>
+
+<pre><code>rref($$)
+</code></pre>
+
+<pre><code>aug($A, B)
+</code></pre>
+
+<pre><code>5*ident(3)
+</code></pre>
+
+<pre><code>ident(v)/3
+</code></pre>
+
+<pre><code>rref(inv($$))
+</code></pre>
+
     </div>
 </body>
 

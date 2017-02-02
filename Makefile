@@ -3,6 +3,7 @@ all: build
 .PHONY: build
 build:
 	pub build
+	-cp build/web/* out/
 
 .PHONY: serve
 serve:

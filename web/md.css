@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+#instructions {
+    margin-top: 100px;
+    min-width: 100px;
+    max-width: 95%;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    padding: 10px;
+
+    border: 2px solid #afafaf;
+
+    font-family: 'Lato';
+}
+
+#instructions code {
+    background-color: #f7d7d7;
+
+    color: #db0606;
+
+    padding: 4px;
+
+    border-radius: 3px;
+
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+#instructions pre {
+    width: 97%;
+
+    background-color: #eaeaea;
+
+    padding: 10px;
+
+    box-sizing: border-box;
+
+    margin-top: 15px;
+    margin-bottom: 15px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    border: 1px solid black;
+}
+
+#instructions pre code {
+    background-color: transparent;
+}
+
+#instructions p {
+    line-height: 1.5em;
+}
+
+#instructions ul {
+    line-height: 1.5em;
+}
