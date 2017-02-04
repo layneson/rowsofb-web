@@ -153,6 +153,27 @@ void hideResult() {
   rdiv.style.display = "none";
 }
 
+class MatrixInputAction {
+}
+
+class MatrixInputActionMove extends MatrixInputAction {
+  int r, c;
+
+  MatrixInputActionMove(int r, int c) : this.r = r, this.c = c;
+}
+
+class MatrixInputActionNewCol extends MatrixInputActionMove {
+  int ncol;
+
+  MatrixInputActionNewCol(int r, int c, int ncol) : super(r, c), this.ncol = ncol;
+}
+
+class MatrixInputActionNewRow extends MatrixInputActionMove {
+  int nrow;
+
+  MatrixInputActionNewRow(int r, int c, int nrow) : super(r, c), this.nrow = nrow;
+}
+
 class MatrixInput {
   Token tok;
   html.Element table;
@@ -163,6 +184,8 @@ class MatrixInput {
 
   MatrixInput next = null;
   Function finished;
+
+  List<MatrixInputAction> undoStack = [];
 
   MatrixInput(Token tok) : this.tok = tok {
     table = html.document.createElement("table");
@@ -176,12 +199,15 @@ class MatrixInput {
   }
 
   html.Element _createBox(int r, int c) {
+    int rr = r;
+    int cc = c;
+
     var box = html.document.createElement("span");
     box.attributes["contenteditable"] = "true";
     box.classes.add("minput-box");
 
     box.onKeyDown.listen((ev) {
-      handleInput(ev, r, c);
+      handleInput(ev, rr, cc);
     });
 
     return box;
@@ -227,8 +253,12 @@ class MatrixInput {
         render();
 
         boxes[c + 1].focus();
+
+        undoStack.add(new MatrixInputActionNewCol(r, c, c + 1));
       } else {
         boxes[r * cols + c + 1].focus();
+
+        undoStack.add(new MatrixInputActionMove(r, c));
       }
     } else if (ev.keyCode == html.KeyCode.ENTER) {
       ev.preventDefault();
@@ -244,6 +274,7 @@ class MatrixInput {
       }
 
       if (r + 1 == rows) {
+
         rows++;
 
         for (int i = 0; i < cols; i++) {
@@ -253,8 +284,59 @@ class MatrixInput {
         render();
 
         boxes[(r + 1) * cols].focus();
+
+        undoStack.add(new MatrixInputActionNewRow(r, c, r + 1));
       } else {
+
         boxes[(r + 1) * cols + c].focus();
+
+        undoStack.add(new MatrixInputActionMove(r, c));
+      }
+    } else if (ev.keyCode == html.KeyCode.BACKSPACE) {
+      if (boxes[r * cols + c].text.trim().isNotEmpty || undoStack.isEmpty) {
+        return;
+      }
+
+      ev.preventDefault();
+
+      if (undoStack.last is MatrixInputActionNewCol) {
+        MatrixInputActionNewCol lncol = undoStack.removeLast();
+
+        List<html.Element> newBoxes = [];
+
+        for (int rr = 0; rr < rows; rr++) {
+          for (int cc = 0; cc < cols; cc++) {
+            html.Element box = boxes[rr * cols + cc];
+
+            if (cc != lncol.ncol) {
+              newBoxes.add(box);
+            }
+          }
+        }
+
+        boxes = newBoxes;
+
+        cols--;
+
+        render();
+
+        focusEndOfContenteditable(boxes[lncol.r * cols + lncol.c]..focus());
+      } else if (undoStack.last is MatrixInputActionNewRow) {
+        MatrixInputActionNewRow lnrow = undoStack.removeLast();
+
+        for (int cc = 0; cc < cols; cc++) {
+          boxes.removeLast();
+        }
+
+        rows--;
+
+        render();
+        
+        focusEndOfContenteditable(boxes[lnrow.r * cols + lnrow.c]..focus());
+      } else if (undoStack.last is MatrixInputActionMove) {
+        MatrixInputActionMove lnmove = undoStack.removeLast();
+
+        focusEndOfContenteditable(boxes[lnmove.r * cols + lnmove.c]..focus());
       }
     }
   }
@@ -293,4 +375,13 @@ void hideInputs() {
   html.querySelector("#inputs")
     ..children.clear()
     ..style.display = "none";
+}
+
+void focusEndOfContenteditable(html.Element e) {
+  html.Range r = html.document.createRange();
+  r.selectNodeContents(e);
+  r.collapse(false);
+  html.Selection s = html.window.getSelection();
+  s.removeAllRanges();
+  s.addRange(r);
 }
