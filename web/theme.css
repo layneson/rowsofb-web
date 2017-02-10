@@ -192,3 +192,21 @@ html, body {
 .minput-box:focus {
     outline: none;
 }
+
+footer {
+    font-family: 'Source Code Pro', monospace;
+    font-size: 18px;
+
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+}
+
+footer a {
+    color: black;
+}
+
+footer a:visited {
+    color: black;
+}
