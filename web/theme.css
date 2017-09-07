@@ -129,6 +129,7 @@ html, body {
     width: 6px;
     bottom: 0;
 }
+
 .matrix:before {
     left: -6px;
     border-right: 0px;
